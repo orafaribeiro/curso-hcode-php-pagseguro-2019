@@ -16,15 +16,14 @@ $app->get('/payment', function() {
 
     $years = [];
     
-    for ($y = date('Y'); $y < (date('Y')+14); $y++) {
+    for ($y = date('Y'); $y < (date('Y')+14); $y++)
+    {
 
         array_push($years, $y);
 
     }
     
-    $page = new Page([
-        "footer"=>false
-    ]);
+    $page = new Page();
 
     $page->setTpl("payment", [
         "order"=>$order->getValues(),
