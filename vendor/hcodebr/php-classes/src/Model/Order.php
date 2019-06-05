@@ -220,6 +220,17 @@ class Order extends Model {
 
 	}
 
+	public function getAddress():Address
+	{
+
+		$address = new Address();
+
+		$address->setData($this->getValues());
+
+		return $address;
+
+	}
+
 }
 
 ?>

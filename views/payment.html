@@ -484,7 +484,7 @@ scripts.push(function(){
             expirationYear: params.year,
             success: function(response) {
 
-                console.log("TOKEN", response.card.token);
+                params.token = response.card.token;
 
                 PagSeguroDirectPayment.onSenderHashReady(function(response){
 
@@ -495,11 +495,19 @@ scripts.push(function(){
 
                     var hash = response.senderHash;
 
-                    console.log("HASH", hash);
+                    params.hash = hash;
 
                 });
 
-                console.log(params);
+                $.post(
+                    "/payment/credit",
+                    $.param(params),
+                    function(r){
+
+                        console.log(r);
+
+                    }
+                );
 
             },
             error: function(response) {
