@@ -123,6 +123,9 @@ $app->post("/checkout", function(){
 		'vltotal'=>$cart->getvltotal()
 	]);
 
+	// var_dump($order->getValues());
+	// exit;
+
 	$order->save();
 
 	$order->toSession();
