@@ -35,7 +35,7 @@ $app->post("/payment/credit", function(){
 
     $phone = new Phone($_POST['ddd'], $_POST['phone']);
 
-    $address = new Address(
+    $shippingAddress = new Address(
         $address->getdesaddress(),
         $address->getdesnumber(),
         $address->getdescomplement(),
@@ -52,17 +52,48 @@ $app->post("/payment/credit", function(){
 
     $holder = new Holder($order->getdesperson(), $cpf, $birthDate, $phone);
 
-	$shipping = new Shipping($address, (float)$cart->getvlfreight(), Shipping::PAC);
+	$shipping = new Shipping($shippingAddress, (float)$cart->getvlfreight(), Shipping::PAC);
 	
     $intallment = new Installment((int)$_POST['installments_qtd'], (float)$_POST['installments_value']);
 
-    $dom = new DOMDocument();
+    $billingAddress = new Address(
+        $address->getdesaddress(),
+        $address->getdesnumber(),
+        $address->getdescomplement(),
+        $address->getdesdistrict(),
+        $address->getdeszipcode(),
+        $address->getdescity(),
+        $address->getdesstate(),
+        $address->getdescountry()
+    );
 
-    $test = $intallment->getDOMElement();
+    $creditCard = new CreditCard($_POST['token'], $intallment, $holder, $billingAddress);
+	
+    $payment = new Payment($order->getidorder(), $sender, $shipping);
 
-    $testNode = $dom->importNode($test, true);
+    foreach ($cart->getProducts() as $product)
+    {
 
-    $dom->appendChild($testNode);
+        $item = new Item(
+            (int)$product['idproduct'],
+            $product['desproduct'],
+            (float)$product['vlprice'],
+            (int)$product['nrqtd']
+        );
+
+        $payment->addItem($item);
+
+    }
+
+    $payment->setCreditCard($creditCard);
+	
+    // Transporter::sendTransaction($payment);
+
+    // echo json_encode(array(
+    //     "success"=>true
+    // ));
+
+    $dom = $payment->getDOMDocument();
 
     echo $dom->saveXml();
 
