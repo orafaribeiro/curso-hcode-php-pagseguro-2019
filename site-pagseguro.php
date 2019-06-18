@@ -95,7 +95,7 @@ $app->post("/payment/credit", function(){
 
     $dom = $payment->getDOMDocument();
 
-    echo $dom->saveXml();
+    print_r($dom->saveXml());
 
 });
 
