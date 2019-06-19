@@ -87,15 +87,11 @@ $app->post("/payment/credit", function(){
 
     $payment->setCreditCard($creditCard);
 	
-    // Transporter::sendTransaction($payment);
+    Transporter::sendTransaction($payment);
 
-    // echo json_encode(array(
-    //     "success"=>true
-    // ));
-
-    $dom = $payment->getDOMDocument();
-
-    print_r($dom->saveXml());
+    echo json_encode(array(
+        "success"=>true
+    ));
 
 });
 
