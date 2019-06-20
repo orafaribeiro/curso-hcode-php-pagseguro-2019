@@ -77,7 +77,7 @@ class Transporter {
 			"verify"=>false
 		]);
 		
-		$xml = simplexml_load_string($res->getBody()->getContents());
+		$xml = simplexml_load_string($res->getBody()->getContents());		
 
 		$order = new Order();
 
